@@ -1,0 +1,20 @@
+<ion-view view-title="基本資料設定">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-input item-stacked-label">
+        <span class="input-label">姓名</span>
+        <input type="text" ng-model="settings.name" placeholder="請輸入姓名">
+      </ion-item>
+      <ion-item class="item-input item-stacked-label">
+        <span class="input-label">Email</span>
+        <input type="email" ng-model="settings.email" placeholder="請輸入Email">
+      </ion-item>
+    </ion-list>
+    <div class="padding">
+      <button class="button button-block button-positive" 
+              ng-disabled="!settings.name || !settings.email" ng-click="updateNameEmail(settings)">
+        確定
+      </button>
+    </div>
+  </ion-content>
+</ion-view>

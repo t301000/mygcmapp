@@ -1,0 +1,37 @@
+<ion-view view-title="設定">
+  <ion-content>
+    <ion-list>
+      
+      <ion-item class="item-divider">
+          基本資料
+      </ion-item>
+
+      <ion-item class="item-icon-right" href="#/tab/setting">
+          姓名
+          <span class="item-note">{{settings.name || '未設定'}}</span>
+          <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+
+      <ion-item class="item-icon-right" href="#/tab/setting">
+          Email
+          <span class="item-note">{{settings.email || '未設定'}}</span>
+          <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
+
+      <ion-item class="item-divider">
+          註冊狀態
+      </ion-item>
+
+      <ion-item class="item-toggle">
+          註冊
+          <label class="toggle">
+            <input type="checkbox" ng-model="settings.done" ng-true-value="1" ng-change="toggle()">
+            <div class="track">
+              <div class="handle"></div>
+            </div>
+          </label>
+      </ion-item>
+
+    </ion-list>
+  </ion-content>
+</ion-view>
