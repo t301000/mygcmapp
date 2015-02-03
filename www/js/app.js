@@ -66,16 +66,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         // 向 GCM php server 註銷 regid
         console.log('regid to unregister ==> '+regid);
         
-        GcmServerAPI.unregister(regid).then(function(result){
-          // 成功，更新資料庫
-          MyDB.updateDone(0).then(function(){
-            $cordovaToast.showLongBottom("已取消註冊");
+        GcmServerAPI.unregister(regid)
+        .then(function(result){
+            // 成功，更新資料庫
+            return MyDB.updateDone(0);
+          })
+        .then(function(){
+            return $cordovaToast.showLongBottom("已取消註冊");
+          })
+        .then(function(){
+            
           },function(error){
             alert(error);
           });
-        },function(error){
-          alert(error);
-        });
         
       });
 
@@ -83,11 +86,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       $rootScope.$on('updateGCMData', function(event, data){
         //console.log('update data ==> '+ angular.toJson(data,true));
 
-        GcmServerAPI.updateGCMData(data).then(function(result){
-          $cordovaToast.showLongBottom("註冊資料已更新");
-        },function(error){
-          alert(error);
-        });
+        GcmServerAPI.updateGCMData(data)
+        .then(function(result){
+            $cordovaToast.showLongBottom("註冊資料已更新");
+          },function(error){
+            alert(error);
+          });
         
       });
 
@@ -99,24 +103,30 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                     // 將regid與基本資料送至server儲存
                     // 完成後顯示提示訊息
                     var config = null;
-                    MyDB.getConfig().then(function(result){
-                      var config = result.rows.item(0);
-                      GcmServerAPI.register({
-                        regid: notification.regid,
-                        name: config.name,
-                        email: config.email
-                      }).then(function(id){
+                    MyDB.getConfig()
+                    .then(function(result){
+                        var config = result.rows.item(0);
+                        
+                        return GcmServerAPI.register({
+                          regid: notification.regid,
+                          name: config.name,
+                          email: config.email
+                        });
+                      })
+                    .then(function(id){
                         // server 儲存成功 
-                        MyDB.updateRegID(notification.regid).then(function(result){
+                        return MyDB.updateRegID(notification.regid);
+                      })
+                    .then(function(result){
                           $cordovaToast.showLongBottom("已向伺服器註冊成功");
                         },function(error){
                           alert('更新資料庫時發生錯誤（001）');
-                        });
+                        })
+                    .then(function(){
                       },function(error){
                         // server 儲存失敗
                         alert("向伺服器註冊失敗：" + error);
                       });
-                    });
     	          	}
     	          	break;
 
