@@ -93,6 +93,78 @@ angular.module('starter.services', [])
     return q.promise;
   };
 
+  // 儲存收到的 message
+  self.saveMessage = function(message){
+    var q = $q.defer();
+    var sql = "INSERT INTO messages (content, sender) VALUES (?,?)";
+
+    $cordovaSQLite.execute(self.db, sql, [message.content, message.sender]).then(function(result){
+      q.resolve(result);
+    },function(error){
+      q.reject(error);
+    });
+
+    return q.promise;
+  };
+
+  // 刪除 message
+  self.deleteMessage = function(id){
+    var q = $q.defer();
+    var sql = "DELETE FROM messgaes WHERE id=?";
+
+    $cordovaSQLite.execute(self.db, sql, [id]).then(function(result){
+      q.resolve(result);
+    },function(error){
+      q.reject(error);
+    });
+
+    return q.promise;
+  };
+
+  // 切換message已讀
+  self.toggleMessageReaded = function(id){
+    var q = $q.defer();
+    var sql = "UPDATE messages SET readed=1 WHERE id=?";
+
+    $cordovaSQLite.execute(self.db, sql, [id]).then(function(result){
+      q.resolve(result);
+    },function(error){
+      q.reject(error);
+    });
+
+    return q.promise;
+  };
+
+  // 取得message內容
+  self.getMessageDetail = function(id){
+    var q = $q.defer();
+    var sql = "SELECT * FROM messages WHERE id=?";
+
+    $cordovaSQLite.execute(self.db, sql, [id]).then(function(result){
+      q.resolve(result);
+    },function(error){
+      q.reject(error);
+    });
+
+    return q.promise;
+  };
+
+  // 取得message list，可傳入keyword搜尋
+  self.getMessageList = function(keyword){
+    var q = $q.defer();
+    var whereStr = "";
+    
+    var sql = "SELECT * FROM messages " + whereStr + " ORDER BY id DESC";
+
+    $cordovaSQLite.execute(self.db, sql).then(function(result){
+      q.resolve(result);
+    },function(error){
+      q.reject(error);
+    });
+
+    return q.promise;
+  };
+
   return self;
 })
 
